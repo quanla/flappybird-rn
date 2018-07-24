@@ -9,7 +9,6 @@ export class Game extends React.Component {
         return (
             <View style={styles.container}>
                 <ImageBackground style={styles.background} source={require("../sprites/background-day.png")}>
-
                     <Ground/>
                 </ImageBackground>
             </View>
