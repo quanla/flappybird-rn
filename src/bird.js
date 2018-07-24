@@ -1,20 +1,17 @@
 import React from "react";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 
-export class Bird extends React.Component {
 
-    render() {
+export const Bird = ({bird}) => (
+    <View style={[styles.bird, {top: bird.position}]}>
+        <Image source={require("../sprites/yellowbird-midflap.png")}/>
 
-        return (
-            <View>
-
-            </View>
-        );
-    }
-}
+    </View>
+);
 
 const styles = StyleSheet.create({
-    container: {
-
+    bird: {
+        position: "absolute",
+        left: 100,
     },
 });

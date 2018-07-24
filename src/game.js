@@ -18,15 +18,19 @@ export class Game extends FComponent {
 
     render() {
 
-        this.world.getView();
+        let {bird, ground} = extractWorldView(this.world.getView());
 
         return (
             <View style={styles.container}>
                 <ImageBackground style={styles.background} source={require("../sprites/background-day.png")}>
 
-                    <Bird/>
+                    <Bird
+                        {...bird}
+                    />
 
-                    <Ground/>
+                    <Ground
+                        {...ground}
+                    />
                 </ImageBackground>
             </View>
         );
