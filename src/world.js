@@ -13,7 +13,7 @@ function collide(bird, pipes, distance) {
     return pipes.find((p) => {
         if (
             30 >= p.x - distance && 30 <= p.x + 20 - distance
-            && (bird.position <= p.range.from || bird.position >= p.range.to)
+            && (bird.position <= p.range.from || bird.position + 34 >= p.range.to)
         ) {
             return true;
         }
@@ -31,6 +31,7 @@ const createWorld = () => {
         velocity: 0,
     };
     let started = null;
+    let ended = null;
 
     const endAnimation = animationLoop((deltaTime) => {
         time += deltaTime;
@@ -46,6 +47,7 @@ const createWorld = () => {
             // Collision
 
             if (collide(bird, pipes, time * xSpeed)) {
+                ended = true;
                 endAnimation();
             }
 
@@ -59,6 +61,7 @@ const createWorld = () => {
             time,
             bird,
             pipes,
+            ended,
         }),
         flap: () => {
             if (!started) {
@@ -94,7 +97,7 @@ const setPipes = (pipes, distance) => {
         const lastX = pipes.length === 0 ? distance + 30 : pipes[pipes.length - 1].x;
         if (lastX < distance + 200) {
             const from = Math.random() * (180) + 100;
-            const height = Math.random() * (100) + 100;
+            const height = Math.random() * (100) + 160;
             pipes.push({
                 x: lastX + 80,
                 range: {from, to: from + height},

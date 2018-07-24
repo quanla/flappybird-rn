@@ -12,6 +12,10 @@ export class Game extends FComponent {
     constructor(props, context) {
         super(props, context);
 
+        this.initWorld();
+    }
+
+    initWorld() {
         this.world = createWorld();
 
         this.onUnmount(this.world.onUpdated(() => this.forceUpdate()));
@@ -19,36 +23,41 @@ export class Game extends FComponent {
 
     render() {
 
-        let {bird, ground, pipes} = extractWorldView(this.world.getView());
+        let {bird, ground, pipes, ended} = extractWorldView(this.world.getView());
 
         return (
             <View style={styles.container}>
-                <TouchableWithoutFeedback
-                    onPress={() => this.world.flap()}
-                    style={styles.touchable}
-                >
-                    <ImageBackground style={styles.background} source={require("../sprites/background-day.png")}>
+                <ImageBackground style={styles.background} source={require("../sprites/background-day.png")}>
 
+                    <View style={styles.flyZone}>
                         <Bird
                             {...bird}
-                            ground={112}
                         />
 
                         <Pipes
                             {...pipes}
-                            ground={112}
                         />
+                    </View>
+                    <View style={styles.groundZone}>
                         <Ground
                             {...ground}
                         />
-                    </ImageBackground>
+                    </View>
+                </ImageBackground>
+
+                <TouchableWithoutFeedback
+                    onPressIn={() => ended ? this.initWorld() : this.world.flap()}
+                >
+                    <View
+                        style={styles.touchable}
+                    />
                 </TouchableWithoutFeedback>
             </View>
         );
     }
 }
 
-function extractWorldView({distance, time, bird, pipes}) {
+function extractWorldView({distance, time, bird, pipes, ended}) {
     return {
         bird: {
             bird,
@@ -59,6 +68,7 @@ function extractWorldView({distance, time, bird, pipes}) {
             pipes,
             distance,
         },
+        ended,
     };
 }
 
@@ -67,7 +77,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     touchable: {
-        backgroundColor: "black",
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        top: 0,
+        left: 0,
     },
     flyZone: {
         flex: 1,

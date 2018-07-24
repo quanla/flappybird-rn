@@ -1,18 +1,31 @@
 import React from "react";
-import { StyleSheet, Image, View } from 'react-native';
+import {StyleSheet, Image, View, Dimensions} from 'react-native';
 
+const screenWidth = Dimensions.get('window').width;
 
-export const Bird = ({bird, ground}) => {
+export const Bird = ({bird}) => {
     // console.log(bird);
     return (
         <View style={[styles.bird, {
-            bottom: bird.position + ground,
-            transform: [{
-                rotateZ: `${-Math.atan(bird.velocity)}rad`,
-                // rotateZ: `45deg`,
-            }],
+            bottom: bird.position,
         }]}>
-            <Image source={require("../sprites/yellowbird-midflap.png")}/>
+            {/*<View style={{*/}
+                {/*position: "absolute",*/}
+                {/*left: screenWidth * .08 - 2,*/}
+                {/*bottom: 2,*/}
+                {/*width: 4,*/}
+                {/*height: 4,*/}
+                {/*backgroundColor: "red",*/}
+            {/*}}/>*/}
+            <Image
+                style={{
+                    transform: [{
+                        rotateZ: `${-Math.atan(bird.velocity)}rad`,
+                        // rotateZ: `45deg`,
+                    }]
+                }}
+
+                source={require("../sprites/yellowbird-midflap.png")}/>
         </View>
     );
 };
