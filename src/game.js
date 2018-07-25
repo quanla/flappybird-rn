@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import {StyleSheet, View, ImageBackground, TouchableWithoutFeedback, Dimensions} from 'react-native';
 import {Ground} from "./ground";
 import {createWorld} from "./world";
 import {FComponent} from "./common/f-component";
@@ -16,7 +16,8 @@ export class Game extends FComponent {
     }
 
     initWorld() {
-        this.world = createWorld();
+        const {width, height} = Dimensions.get('window');
+        this.world = createWorld({width, height});
 
         this.onUnmount(this.world.onUpdated(() => this.forceUpdate()));
     }
@@ -30,12 +31,12 @@ export class Game extends FComponent {
                 <ImageBackground style={styles.background} source={require("../sprites/background-day.png")}>
 
                     <View style={styles.flyZone}>
-                        <Bird
-                            {...bird}
-                        />
-
                         <Pipes
                             {...pipes}
+                        />
+
+                        <Bird
+                            {...bird}
                         />
                     </View>
                     <View style={styles.groundZone}>
@@ -85,10 +86,12 @@ const styles = StyleSheet.create({
     },
     flyZone: {
         flex: 1,
+        // zIndex: 1,
     },
     groundZone: {
         flex: 0,
         height: 112,
+        // zIndex: 0,
     },
     background: {
         flex: 1,

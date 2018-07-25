@@ -9,17 +9,19 @@ export class Ground extends React.Component {
         const {distance} = this.props;
 
         const images = () => {
+            let count = Math.ceil(screenWidth / (336-1)) + 1;
 
             return (
                 <Fragment>
-                    <Image style={[styles.img, {left: 0}]} source={require("../sprites/base.png")}/>
-                    <Image style={[styles.img, {left: screenWidth - 1}]} source={require("../sprites/base.png")}/>
+                    {new Array(count).fill(0).map((_, i) => (
+                        <Image key={i} style={[styles.img, {left: i*(336-1)}]} source={require("../sprites/base.png")}/>
+                    ))}
                 </Fragment>
             );
         };
 
         return (
-            <View style={[styles.ground, {left: `${-distance % 100}%`}]} onLayout={(e) => {
+            <View style={[styles.ground, {left: -distance % 336}]} onLayout={(e) => {
                 // console.log(e.nativeEvent.layout)
             }}>
                 {images()}
@@ -31,14 +33,14 @@ export class Ground extends React.Component {
 const styles = StyleSheet.create({
     ground: {
         position: "absolute",
-        width: screenWidth * 2 - 1,
+        // left provided in render
         bottom: 0,
-        // height: "100%",
+        width: screenWidth * 2 - 1,
         height: 112,
         flexDirection: "row",
     },
     img: {
-        width: screenWidth,
+        width: 336,
         position: "absolute",
         top: 0,
     },

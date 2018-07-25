@@ -2,32 +2,15 @@ import {addRemove} from "./common/utils/collections";
 import {animationLoop} from "./common/animation";
 import {chain} from "./common/utils/fs";
 
-const xSpeed = 0.03;
+const xSpeed = 0.18;
 
-function collide(bird, pipes, distance) {
-
-    if (bird.position <= 0) {
-        return true;
-    }
-
-    return pipes.find((p) => {
-        if (
-            30 >= p.x - distance && 30 <= p.x + 20 - distance
-            && (bird.position <= p.range.from || bird.position + 34 >= p.range.to)
-        ) {
-            return true;
-        }
-    } )
-}
-
-const createWorld = () => {
-
+const createWorld = ({width, height}) => {
     const updateListeners = [];
 
     let time = 0;
     let pipes = [];
     let bird = {
-        position: 300,
+        position: (height - 112) / 3,
         velocity: 0,
     };
     let started = null;
@@ -42,7 +25,7 @@ const createWorld = () => {
                 (bird) => physics(bird, deltaTime ),
             );
 
-            pipes = setPipes(pipes, time * xSpeed);
+            pipes = setPipes(pipes, time * xSpeed, width);
 
             // Collision
 
@@ -90,16 +73,16 @@ const physics = (bird, dt) => ({
     position: Math.max( 0, bird.position + dt * bird.velocity ),
 });
 
-const setPipes = (pipes, distance) => {
-    pipes = pipes.filter((p) => p.x >= distance - 50);
+const setPipes = (pipes, distance, width) => {
+    pipes = pipes.filter((p) => p.x >= distance - 52);
 
     for (;;) {
-        const lastX = pipes.length === 0 ? distance + 30 : pipes[pipes.length - 1].x;
-        if (lastX < distance + 200) {
+        const lastX = pipes.length === 0 ? null : pipes[pipes.length - 1].x;
+        if (lastX == null || lastX < distance + width - 200) {
             const from = Math.random() * (180) + 100;
             const height = Math.random() * (100) + 160;
             pipes.push({
-                x: lastX + 80,
+                x: lastX == null ? (distance + width) : (lastX + 200),
                 range: {from, to: from + height},
             });
         } else {
@@ -107,7 +90,22 @@ const setPipes = (pipes, distance) => {
         }
     }
 
-    // console.log(pipes[0].x);
-
     return pipes;
 };
+
+
+function collide(bird, pipes, distance) {
+
+    if (bird.position <= 0) {
+        return true;
+    }
+
+    return pipes.find((p) => {
+        if (
+            100 + 34 >= p.x - distance && 100 <= p.x - distance + 52
+            && (bird.position <= p.range.from || bird.position + 24 >= p.range.to)
+        ) {
+            return true;
+        }
+    } )
+}

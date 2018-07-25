@@ -1,31 +1,25 @@
 import React from "react";
-import {StyleSheet, Image, View, Dimensions} from 'react-native';
+import {StyleSheet, Image, View} from 'react-native';
 
-const screenWidth = Dimensions.get('window').width;
-
-export const Bird = ({bird}) => {
-    // console.log(bird);
+export const Bird = ({bird, time}) => {
+    let flapRound = 500;
+    const flap = Math.floor((time % flapRound) / flapRound * 4);
     return (
         <View style={[styles.bird, {
             bottom: bird.position,
         }]}>
-            {/*<View style={{*/}
-                {/*position: "absolute",*/}
-                {/*left: screenWidth * .08 - 2,*/}
-                {/*bottom: 2,*/}
-                {/*width: 4,*/}
-                {/*height: 4,*/}
-                {/*backgroundColor: "red",*/}
-            {/*}}/>*/}
             <Image
                 style={{
                     transform: [{
                         rotateZ: `${-Math.atan(bird.velocity)}rad`,
-                        // rotateZ: `45deg`,
                     }]
                 }}
 
-                source={require("../sprites/yellowbird-midflap.png")}/>
+                source={
+                    flap === 1                 ?    require("../sprites/yellowbird-upflap.png") :
+                    (flap === 0 || flap === 2) ?    require("../sprites/yellowbird-midflap.png") :
+                                                    require("../sprites/yellowbird-downflap.png")
+                }/>
         </View>
     );
 };
@@ -33,6 +27,6 @@ export const Bird = ({bird}) => {
 const styles = StyleSheet.create({
     bird: {
         position: "absolute",
-        left: "22%",
+        left: 100,
     },
 });
